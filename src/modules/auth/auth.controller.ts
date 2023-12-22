@@ -6,16 +6,16 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { IUser } from 'src/common/interface/user.interface';
-import { Role } from 'src/enums/roles.enum';
-import { RegisterUserDto } from '../users/register-user.dto';
+import { Role } from 'src/shared/enums/roles.enum';
+import { IUser } from 'src/shared/interface/user.interface';
+import { getUser } from '../../common/decorators/get-user.decorator';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
-import { getUser } from './decorators/get-user.decorator';
-import { Roles } from './decorators/roles.decorator';
 import { SignInDto } from './dto/sign-in.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { RolesGuard } from './guards/roles.guard';
+import { SignUpDto } from './dto/sign-up.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -25,8 +25,8 @@ export class AuthController {
   ) {}
 
   @Post('sign-up')
-  async signUp(@Body() registerUserDto: RegisterUserDto) {
-    return this.usersService.create(registerUserDto);
+  async signUp(@Body() signUpDto: SignUpDto) {
+    return this.usersService.create(signUpDto);
   }
 
   @Post('sign-in')

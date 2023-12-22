@@ -9,7 +9,7 @@ import { UsersService } from '../users/users.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { RefreshTokenIdsStorage } from './refresh-token-id-storage';
-import { JwtStrategy } from './strategy/jwt.strategy';
+import { JwtStrategy } from './startegies/jwt.strategy';
 
 @Module({
   imports: [

@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { IsNotEmpty } from 'class-validator';
-import { Role } from 'src/enums/roles.enum';
+import { Role } from 'src/shared/enums/roles.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
