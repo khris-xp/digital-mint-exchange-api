@@ -7,12 +7,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { IUser } from 'src/common/interface/user.interface';
+import { Role } from 'src/enums/roles.enum';
 import { RegisterUserDto } from '../users/register-user.dto';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { getUser } from './decorators/get-user.decorator';
+import { Roles } from './decorators/roles.decorator';
 import { SignInDto } from './dto/sign-in.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -44,7 +47,8 @@ export class AuthController {
     return this.usersService.getProfile(user);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('users')
   async getAllUsers() {
     return this.authService.getAllUsers();
