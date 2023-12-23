@@ -5,6 +5,8 @@ import { CoinModule } from './modules/coin/coin.module';
 import { Coin } from './modules/coin/entity/coin.entity';
 import { User } from './modules/users/users.entity';
 import { UsersModule } from './modules/users/users.module';
+import { Wallet } from './modules/wallet/entities/wallet.entity';
+import { WalletModule } from './modules/wallet/wallet.module';
 
 @Module({
   imports: [
@@ -14,13 +16,14 @@ import { UsersModule } from './modules/users/users.module';
       port: 5432,
       password: 'khris2547',
       username: 'khrisbharmmano',
-      entities: [User, Coin],
+      entities: [User, Coin, Wallet],
       database: 'khrisbharmmano',
       synchronize: true,
     }),
     AuthModule,
     UsersModule,
     CoinModule,
+    WalletModule,
   ],
   controllers: [],
   providers: [],
