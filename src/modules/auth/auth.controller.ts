@@ -4,6 +4,7 @@ import {
   Get,
   Headers,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { Role } from 'src/shared/enums/roles.enum';
@@ -32,6 +33,12 @@ export class AuthController {
   @Post('sign-in')
   async signIn(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('add-token')
+  async addToken(@getUser() user: IUser, @Body('token') token: number) {
+    return this.usersService.addToken(token, user);
   }
 
   @UseGuards(JwtAuthGuard)

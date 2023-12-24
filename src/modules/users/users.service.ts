@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { IUser } from 'src/shared/interface/user.interface';
@@ -44,5 +44,13 @@ export class UsersService {
 
   async findAll(): Promise<User[]> {
     return this.userRepository.find();
+  }
+
+  async addToken(token: number, user: IUser): Promise<IUser> {
+    if (token <= 0) {
+      throw new BadRequestException('Token must be greater than 0');
+    }
+    user.token = token;
+    return this.userRepository.save(user);
   }
 }
