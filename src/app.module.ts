@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
 import { CoinModule } from './modules/coin/coin.module';
 import { Coin } from './modules/coin/entities/coin.entity';
+import { CurrencyModule } from './modules/currency/currency.module';
 import { User } from './modules/users/entities/users.entity';
 import { UsersModule } from './modules/users/users.module';
 import { Wallet } from './modules/wallet/entities/wallet.entity';
@@ -24,6 +25,7 @@ import { WalletModule } from './modules/wallet/wallet.module';
     UsersModule,
     CoinModule,
     WalletModule,
+    CurrencyModule,
   ],
   controllers: [],
   providers: [],
