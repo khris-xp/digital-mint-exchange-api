@@ -19,6 +19,7 @@ import { CoinService } from '../coin/coin.service';
 import { Coin } from '../coin/entity/coin.entity';
 import { UsersService } from '../users/users.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
+import { SellWalletDto } from './dto/sell-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { WalletService } from './wallet.service';
 
@@ -103,6 +104,33 @@ export class WalletController {
       coin.price,
       createWalletDto,
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('sell')
+  async sellWallet(
+    @getUser() user: IUser,
+    @Body() sellWalletDto: SellWalletDto,
+  ) {
+    const owner_id = await this.getOwnerId(user);
+    const coin = await this.getCoin(Number(sellWalletDto.coin_id));
+    const update_price = this.calculateUpdatePrice(coin, sellWalletDto.amount);
+
+    const update_token = user.token + coin.price * sellWalletDto.amount;
+
+    await this.updateCoinSupply(
+      Number(sellWalletDto.coin_id),
+      coin.max_supply + sellWalletDto.amount,
+    );
+    await this.updateCoinPrice(Number(sellWalletDto.coin_id), update_price);
+
+    await this.updateUserToken('remove', user, update_token);
+
+    if (sellWalletDto.amount <= 0) {
+      throw new BadRequestException('Amount must be greater than 0');
+    }
+
+    return this.walletService.sellWallet(owner_id, coin.price, sellWalletDto);
   }
 
   @Roles(Role.ADMIN)

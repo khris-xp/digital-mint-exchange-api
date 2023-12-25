@@ -42,6 +42,32 @@ export class WalletService {
     }
   }
 
+  async sellWallet(
+    owner_id: string,
+    price: number,
+    wallet: CreateWalletDto,
+  ): Promise<Wallet> {
+    if (wallet.amount <= 0) {
+      throw new BadRequestException('Amount must be greater than 0');
+    }
+    const existingWallet = await this.walletRepository.findOne({
+      where: { owner_id, coin_id: wallet.coin_id },
+    });
+
+    if (existingWallet) {
+      if (existingWallet.amount < wallet.amount) {
+        throw new BadRequestException('Not enough amount');
+      }
+      existingWallet.amount -= wallet.amount;
+      existingWallet.price = price;
+      existingWallet.total = price * existingWallet.amount;
+
+      return this.walletRepository.save(existingWallet);
+    } else {
+      throw new BadRequestException('Wallet not found');
+    }
+  }
+
   findAll(): Promise<Wallet[]> {
     return this.walletRepository.find();
   }
