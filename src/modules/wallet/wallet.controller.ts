@@ -16,7 +16,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CoinService } from '../coin/coin.service';
-import { Coin } from '../coin/entity/coin.entity';
+import { Coin } from '../coin/entities/coin.entity';
 import { UsersService } from '../users/users.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { SellWalletDto } from './dto/sell-wallet.dto';
@@ -170,7 +170,8 @@ export class WalletController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   async remove(id: string) {
     return this.walletService.remove(+id);

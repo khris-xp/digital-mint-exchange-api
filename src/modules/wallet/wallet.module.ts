@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoinService } from '../coin/coin.service';
-import { Coin } from '../coin/entity/coin.entity';
-import { User } from '../users/users.entity';
+import { Coin } from '../coin/entities/coin.entity';
+import { User } from '../users/entities/users.entity';
 import { UsersService } from '../users/users.service';
 import { Wallet } from './entities/wallet.entity';
 import { WalletController } from './wallet.controller';
