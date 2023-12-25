@@ -20,6 +20,7 @@ import { Coin } from '../coin/entities/coin.entity';
 import { UsersService } from '../users/users.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { SellWalletDto } from './dto/sell-wallet.dto';
+import { TransferWalletDto } from './dto/transfer-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { WalletService } from './wallet.service';
 
@@ -103,6 +104,29 @@ export class WalletController {
       owner_id,
       coin.price,
       createWalletDto,
+    );
+  }
+  @UseGuards(JwtAuthGuard)
+  @Post('transfer')
+  async transferWallet(
+    @getUser() user: IUser,
+    @Body() transferWalletDto: TransferWalletDto,
+  ) {
+    const owner_id = await this.getOwnerId(user);
+    const coin = await this.getCoin(Number(transferWalletDto.coin_id));
+
+    if (owner_id === transferWalletDto.transfer_id) {
+      throw new BadRequestException('Cannot transfer to yourself');
+    }
+
+    if (transferWalletDto.amount <= 0) {
+      throw new BadRequestException('Amount must be greater than 0');
+    }
+
+    return this.walletService.transferWallet(
+      owner_id,
+      coin.price,
+      transferWalletDto,
     );
   }
 

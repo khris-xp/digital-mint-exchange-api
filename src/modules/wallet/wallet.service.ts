@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateWalletDto } from './dto/create-wallet.dto';
+import { TransferWalletDto } from './dto/transfer-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { Wallet } from './entities/wallet.entity';
 
@@ -63,6 +64,53 @@ export class WalletService {
       existingWallet.total = price * existingWallet.amount;
 
       return this.walletRepository.save(existingWallet);
+    } else {
+      throw new BadRequestException('Wallet not found');
+    }
+  }
+
+  async transferWallet(
+    owner_id: string,
+    price: number,
+    wallet: TransferWalletDto,
+  ): Promise<Wallet> {
+    if (wallet.amount <= 0) {
+      throw new BadRequestException('Amount must be greater than 0');
+    }
+    const existingWallet = await this.walletRepository.findOne({
+      where: { owner_id, coin_id: wallet.coin_id },
+    });
+
+    if (existingWallet) {
+      if (existingWallet.amount < wallet.amount) {
+        throw new BadRequestException('Not enough amount');
+      }
+      existingWallet.amount -= wallet.amount;
+      existingWallet.price = price;
+      existingWallet.total = price * existingWallet.amount;
+
+      await this.walletRepository.save(existingWallet);
+
+      const existingTransferWallet = await this.walletRepository.findOne({
+        where: { owner_id: wallet.transfer_id, coin_id: wallet.coin_id },
+      });
+
+      if (existingTransferWallet) {
+        existingTransferWallet.amount += wallet.amount;
+        existingTransferWallet.price = price;
+        existingTransferWallet.total = price * existingTransferWallet.amount;
+
+        return this.walletRepository.save(existingTransferWallet);
+      } else {
+        const newWallet: Wallet = new Wallet();
+        newWallet.owner_id = wallet.transfer_id;
+        newWallet.coin_id = wallet.coin_id;
+        newWallet.amount = wallet.amount;
+        newWallet.price = price;
+        newWallet.total = price * wallet.amount;
+
+        return this.walletRepository.save(newWallet);
+      }
     } else {
       throw new BadRequestException('Wallet not found');
     }
