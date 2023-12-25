@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateWalletDto } from './dto/create-wallet.dto';
@@ -12,14 +12,34 @@ export class WalletService {
     private walletRepository: Repository<Wallet>,
   ) {}
 
-  createWallet(owner_id: string, wallet: CreateWalletDto): Promise<Wallet> {
-    const newWallet: Wallet = new Wallet();
-    newWallet.owner_id = owner_id;
-    newWallet.coin_id = wallet.coin_id;
-    newWallet.amount = wallet.amount;
-    newWallet.price = wallet.price;
-    newWallet.total = wallet.total;
-    return this.walletRepository.save(newWallet);
+  async createWallet(
+    owner_id: string,
+    price: number,
+    wallet: CreateWalletDto,
+  ): Promise<Wallet> {
+    if (wallet.amount <= 0) {
+      throw new BadRequestException('Amount must be greater than 0');
+    }
+    const existingWallet = await this.walletRepository.findOne({
+      where: { owner_id, coin_id: wallet.coin_id },
+    });
+
+    if (existingWallet) {
+      existingWallet.amount += wallet.amount;
+      existingWallet.price = price;
+      existingWallet.total = price * existingWallet.amount;
+
+      return this.walletRepository.save(existingWallet);
+    } else {
+      const newWallet: Wallet = new Wallet();
+      newWallet.owner_id = owner_id;
+      newWallet.coin_id = wallet.coin_id;
+      newWallet.amount = wallet.amount;
+      newWallet.price = price;
+      newWallet.total = price * wallet.amount;
+
+      return this.walletRepository.save(newWallet);
+    }
   }
 
   findAll(): Promise<Wallet[]> {
@@ -39,14 +59,15 @@ export class WalletService {
   update(
     id: number,
     owner_id: string,
+    price: number,
     wallet: UpdateWalletDto,
   ): Promise<Wallet> {
     const newWallet: Wallet = new Wallet();
     newWallet.owner_id = owner_id;
     newWallet.coin_id = wallet.coin_id;
     newWallet.amount = wallet.amount;
-    newWallet.price = wallet.price;
-    newWallet.total = wallet.total;
+    newWallet.price = price;
+    newWallet.total = price * wallet.amount;
     newWallet.id = id;
 
     return this.walletRepository.save(newWallet);

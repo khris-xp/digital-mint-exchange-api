@@ -6,12 +6,12 @@ export class Coin {
   id: number;
   @Column()
   name: string;
-  @Column()
+  @Column({ type: 'float', nullable: true })
   price: number;
   @Column()
   image: string;
-  @Column()
+  @Column({ type: 'float', nullable: true })
   max_supply: number;
-  @Column()
+  @Column({ type: 'float', nullable: true })
   rate: number;
 }

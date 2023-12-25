@@ -1,13 +1,13 @@
+import { AuthController } from '@/modules/auth/auth.controller';
+import { AuthService } from '@/modules/auth/auth.service';
+import { User } from '@/modules/users/users.entity';
+import { UsersModule } from '@/modules/users/users.module';
+import { UsersService } from '@/modules/users/users.service';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../users/users.entity';
-import { UsersModule } from '../users/users.module';
-import { UsersService } from '../users/users.service';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
 import { RefreshTokenIdsStorage } from './refresh-token-id-storage';
 import { JwtStrategy } from './startegies/jwt.strategy';
 

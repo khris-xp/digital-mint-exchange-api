@@ -1,3 +1,9 @@
+import { getUser } from '@/common/decorators/get-user.decorator';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
+import { RolesGuard } from '@/common/guards/roles.guard';
+import { Role } from '@/shared/enums/roles.enum';
+import { IUser } from '@/shared/interface/user.interface';
 import {
   Body,
   Controller,
@@ -7,12 +13,6 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { Role } from 'src/shared/enums/roles.enum';
-import { IUser } from 'src/shared/interface/user.interface';
-import { getUser } from '../../common/decorators/get-user.decorator';
-import { Roles } from '../../common/decorators/roles.decorator';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';

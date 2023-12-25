@@ -1,6 +1,6 @@
+import { UsersService } from '@/modules/users/users.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../users/users.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { RefreshTokenIdsStorage } from './refresh-token-id-storage';
 

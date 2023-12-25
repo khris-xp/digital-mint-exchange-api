@@ -10,8 +10,8 @@ export class Wallet {
   coin_id: string;
   @Column()
   amount: number;
-  @Column()
+  @Column({ type: 'float', nullable: true })
   price: number;
-  @Column()
+  @Column({ type: 'float', nullable: true })
   total: number;
 }

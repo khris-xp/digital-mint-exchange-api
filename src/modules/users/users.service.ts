@@ -1,7 +1,7 @@
+import { IUser } from '@/shared/interface/user.interface';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { IUser } from 'src/shared/interface/user.interface';
 import { Repository } from 'typeorm';
 import { SignUpDto } from '../auth/dto/sign-up.dto';
 import { User } from './users.entity';
@@ -47,6 +47,14 @@ export class UsersService {
   }
 
   async addToken(token: number, user: IUser): Promise<IUser> {
+    if (token <= 0) {
+      throw new BadRequestException('Token must be greater than 0');
+    }
+    user.token += token;
+    return this.userRepository.save(user);
+  }
+
+  async updateToken(token: number, user: IUser): Promise<IUser> {
     if (token <= 0) {
       throw new BadRequestException('Token must be greater than 0');
     }
