@@ -86,6 +86,10 @@ export class WalletController {
       throw new BadRequestException('Amount must be greater than 0');
     }
 
+    if (user.token < coin.price * createWalletDto.amount) {
+      throw new BadRequestException('Insufficient token');
+    }
+
     if (coin.max_supply - createWalletDto.amount < 0) {
       throw new BadRequestException('Insufficient supply');
     }
@@ -114,13 +118,20 @@ export class WalletController {
   ) {
     const owner_id = await this.getOwnerId(user);
     const coin = await this.getCoin(Number(transferWalletDto.coin_id));
-
+    const userWallet = await this.walletService.findByOwner(owner_id);
+    const coinInWallet = userWallet.find(
+      (walletEntry) => walletEntry.coin_id === String(coin.id),
+    );
     if (owner_id === transferWalletDto.transfer_id) {
       throw new BadRequestException('Cannot transfer to yourself');
     }
 
     if (transferWalletDto.amount <= 0) {
       throw new BadRequestException('Amount must be greater than 0');
+    }
+
+    if (!coinInWallet) {
+      throw new BadRequestException('Coin not found');
     }
 
     return this.walletService.transferWallet(
