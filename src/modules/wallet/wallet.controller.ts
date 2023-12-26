@@ -140,19 +140,24 @@ export class WalletController {
     const coin = await this.getCoin(Number(sellWalletDto.coin_id));
     const update_price = this.calculateUpdatePrice(coin, sellWalletDto.amount);
 
+    if (sellWalletDto.amount <= 0) {
+      throw new BadRequestException('Amount must be greater than 0');
+    }
+
+    if (sellWalletDto.amount > coin.max_supply) {
+      throw new BadRequestException('Not enough amount');
+    }
+
     const update_token = user.token + coin.price * sellWalletDto.amount;
 
     await this.updateCoinSupply(
       Number(sellWalletDto.coin_id),
       coin.max_supply + sellWalletDto.amount,
     );
+
     await this.updateCoinPrice(Number(sellWalletDto.coin_id), update_price);
 
     await this.updateUserToken('remove', user, update_token);
-
-    if (sellWalletDto.amount <= 0) {
-      throw new BadRequestException('Amount must be greater than 0');
-    }
 
     return this.walletService.sellWallet(owner_id, coin.price, sellWalletDto);
   }
