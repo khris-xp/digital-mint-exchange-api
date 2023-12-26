@@ -18,8 +18,7 @@ import { JwtStrategy } from './startegies/jwt.strategy';
     TypeOrmModule.forFeature([User]),
     PassportModule,
     JwtModule.register({
-      secret: 'vcn48GL%b!p+(2dT98mMwtQs6Z6J',
-      signOptions: { expiresIn: '1h' },
+      secret: process.env.JWT_SECRET,
     }),
   ],
   providers: [AuthService, UsersService, RefreshTokenIdsStorage, JwtStrategy],
