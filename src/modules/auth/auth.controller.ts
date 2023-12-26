@@ -1,8 +1,5 @@
 import { getUser } from '@/common/decorators/get-user.decorator';
-import { Roles } from '@/common/decorators/roles.decorator';
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
-import { RolesGuard } from '@/common/guards/roles.guard';
-import { Role } from '@/shared/enums/roles.enum';
 import { IUser } from '@/shared/interface/user.interface';
 import {
   Body,
@@ -54,8 +51,7 @@ export class AuthController {
     return this.usersService.getProfile(user);
   }
 
-  @Roles(Role.ADMIN)
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('users')
   async getAllUsers() {
     return this.authService.getAllUsers();

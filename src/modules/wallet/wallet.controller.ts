@@ -177,7 +177,14 @@ export class WalletController {
 
   @UseGuards(JwtAuthGuard)
   @Get('owner/:owner_id')
-  async findByOwner(@Param('owner_id') owner_id: string) {
+  async findByOwner(
+    @getUser() user: IUser,
+    @Param('owner_id') owner_id: string,
+  ) {
+    const user_id = await this.getOwnerId(user);
+    if (user_id !== owner_id) {
+      throw new BadRequestException('Cannot view other user wallet');
+    }
     return this.walletService.findByOwner(owner_id);
   }
 
