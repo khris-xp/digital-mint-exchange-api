@@ -82,6 +82,14 @@ export class WalletController {
       createWalletDto.amount,
     );
 
+    if (createWalletDto.amount <= 0) {
+      throw new BadRequestException('Amount must be greater than 0');
+    }
+
+    if (coin.max_supply - createWalletDto.amount < 0) {
+      throw new BadRequestException('Insufficient supply');
+    }
+
     const update_token = user.token - coin.price * createWalletDto.amount;
 
     await this.updateCoinSupply(
@@ -91,14 +99,6 @@ export class WalletController {
     await this.updateCoinPrice(Number(createWalletDto.coin_id), update_price);
 
     await this.updateUserToken('add', user, update_token);
-
-    if (createWalletDto.amount <= 0) {
-      throw new BadRequestException('Amount must be greater than 0');
-    }
-
-    if (coin.max_supply - createWalletDto.amount < 0) {
-      throw new BadRequestException('Insufficient supply');
-    }
 
     return this.walletService.createWallet(
       owner_id,

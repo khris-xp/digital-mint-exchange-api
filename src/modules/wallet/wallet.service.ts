@@ -21,6 +21,7 @@ export class WalletService {
     if (wallet.amount <= 0) {
       throw new BadRequestException('Amount must be greater than 0');
     }
+
     const existingWallet = await this.walletRepository.findOne({
       where: { owner_id, coin_id: wallet.coin_id },
     });
