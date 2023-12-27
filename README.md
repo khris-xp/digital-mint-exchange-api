@@ -1,73 +1,184 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Digital Mint API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Your secure and user-friendly hub for buying and selling cryptocurrencies. Trade effortlessly with real-time data and a diverse range of assets. Explore the digital market confidently with us.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Documentation
 
-## Description
+When I was working on the project, I had a design diagram of this project before starting to write the code to make it easier to write and reduce complexity while writing. In the database table, I separated Coin and Wallets are separated for ease of maintenance and scaling in the future. The main feature of the API is the ability to buy and sell coins and transfer coins to other users, including the price of coins that will adjust according to the amount of coins remaining. in the market
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## API Reference
 
-## Installation
+#### Sign Up
 
-```bash
-$ pnpm install
+```http
+  POST /auth/sign-up
 ```
 
-## Running the app
+| Parameter  | Type     | Description                 |
+| :--------- | :------- | :-------------------------- |
+| `username` | `string` | **Required**. Your Username |
+| `email`    | `string` | **Required**. Your Email    |
+| `password` | `string` | **Required**. Your Password |
 
-```bash
-# development
-$ pnpm run start
+#### Sign In
 
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+```http
+  POST /auth/sign-in
 ```
 
-## Test
+| Parameter  | Type     | Description                 |
+| :--------- | :------- | :-------------------------- |
+| `email`    | `string` | **Required**. Your Email    |
+| `password` | `string` | **Required**. Your Password |
 
-```bash
-# unit tests
-$ pnpm run test
+#### User Profile
 
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+```http
+  GET /auth/profile
 ```
 
-## Support
+| Token          | Type     | Description              |
+| :------------- | :------- | :----------------------- |
+| `Bearer Token` | `string` | **Required**. Your token |
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### All Users
 
-## Stay in touch
+```http
+  GET /auth/users
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+| Token          | Type     | Description              |
+| :------------- | :------- | :----------------------- |
+| `Bearer Token` | `string` | **Required**. Your token |
 
-## License
+### All coin
 
-Nest is [MIT licensed](LICENSE).
+```http
+  GET /coin
+```
+
+| Token          | Type     | Description              |
+| :------------- | :------- | :----------------------- |
+| `Bearer Token` | `string` | **Required**. Your token |
+
+#### Get coin by id
+
+```http
+  GET /coin/{id}
+```
+
+| Parameter | Type     | Description           |
+| :-------- | :------- | :-------------------- |
+| `id`      | `string` | **Required**. Your id |
+
+#### Create Coin
+
+```http
+  POST /coin
+```
+
+| Parameter    | Type     | Description                        |
+| :----------- | :------- | :--------------------------------- |
+| `name`       | `string` | **Required**. Your coin name       |
+| `image`      | `string` | **Required**. Your coin image      |
+| `max_supply` | `number` | **Required**. Your coin max supply |
+| `rate`       | `number` | **Required**. Your coin rate       |
+
+#### Update Coin
+
+```http
+  PUT /coin
+```
+
+| Parameter    | Type     | Description                        |
+| :----------- | :------- | :--------------------------------- |
+| `name`       | `string` | **Required**. Your coin name       |
+| `image`      | `string` | **Required**. Your coin image      |
+| `max_supply` | `number` | **Required**. Your coin max supply |
+| `rate`       | `number` | **Required**. Your coin rate       |
+
+#### Delete coin
+
+```http
+  DELETE /coin/{id}
+```
+
+| Parameter | Type     | Description           |
+| :-------- | :------- | :-------------------- |
+| `id`      | `string` | **Required**. Your id |
+
+### All wallet
+
+```http
+  GET /wallet
+```
+
+| Token          | Type     | Description              |
+| :------------- | :------- | :----------------------- |
+| `Bearer Token` | `string` | **Required**. Your token |
+
+#### Get wallet by id
+
+```http
+  GET /wallet/{id}
+```
+
+| Parameter | Type     | Description           |
+| :-------- | :------- | :-------------------- |
+| `id`      | `string` | **Required**. Your id |
+
+#### Add Token to wallet
+
+```http
+  POST /wallet
+```
+
+| Parameter | Type     | Description                    |
+| :-------- | :------- | :----------------------------- |
+| `coin_id` | `string` | **Required**. Your coin id     |
+| `amount`  | `string` | **Required**. Your coin amount |
+
+#### Sell Token to wallet
+
+```http
+  POST /wallet/sell
+```
+
+| Parameter | Type     | Description                    |
+| :-------- | :------- | :----------------------------- |
+| `coin_id` | `string` | **Required**. Your coin id     |
+| `amount`  | `string` | **Required**. Your coin amount |
+
+#### Delete coin
+
+```http
+  DELETE /wallet/transfer
+```
+
+| Parameter     | Type     | Description                         |
+| :------------ | :------- | :---------------------------------- |
+| `coin_id`     | `string` | **Required**. Your coin id          |
+| `amount`      | `string` | **Required**. Your coin amount      |
+| `transfer_id` | `string` | **Required**. Your user transfer id |
+
+## Authors
+
+- [@khris-xp](https://github.com/khris-xp)
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`PORT`
+`DB_TYPE`
+`DB_HOST`
+`DB_PORT`
+`DB_USERNAME`
+`DB_PASSWORD`
+`DB_DATABASE`
+`JWT_SECRET`
+`COINMARKETCAP_API_KEY`
+
+## Tech Stack
+
+**Server:** Nestjs, Postgresql
