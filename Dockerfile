@@ -1,17 +1,13 @@
 # syntax=docker/dockerfile:1
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/engine/reference/builder/
-
 ARG NODE_VERSION=20.8.1
 ARG PNPM_VERSION=8.6.6
 
 ################################################################################
-# Use node image for base image for all stages.
+# Use node image for the base image for all stages.
 FROM node:${NODE_VERSION}-alpine as base
 
-# Set working directory for all build stages.
+# Set the working directory for all build stages.
 WORKDIR /usr/src/app
 
 # Install pnpm.
@@ -19,7 +15,7 @@ RUN --mount=type=cache,target=/root/.npm \
     npm install -g pnpm@${PNPM_VERSION}
 
 ################################################################################
-# Create a stage for installing production dependecies.
+# Create a stage for installing production dependencies.
 FROM base as deps
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
@@ -52,11 +48,14 @@ RUN pnpm run build
 # where the necessary files are copied from the build stage.
 FROM base as final
 
-# Use production node environment by default.
+# Use the production node environment by default.
 ENV NODE_ENV production
 
 # Run the application as a non-root user.
 USER node
+
+# Install NestJS CLI globally.
+RUN pnpm install -g @nestjs/cli
 
 # Copy package.json so that package manager commands can be used.
 COPY package.json .
@@ -64,8 +63,7 @@ COPY package.json .
 # Copy the production dependencies from the deps stage and also
 # the built application from the build stage into the image.
 COPY --from=deps /usr/src/app/node_modules ./node_modules
-COPY --from=build /usr/src/app/src ./src
-
+COPY --from=build /usr/src/app/dist ./dist
 
 # Expose the port that the application listens on.
 EXPOSE 8081
