@@ -10,7 +10,7 @@ When I was working on the project, I had a design diagram of this project before
 
 #### Sign Up
 
-```http
+```
   POST /auth/sign-up
 ```
 
@@ -22,7 +22,7 @@ When I was working on the project, I had a design diagram of this project before
 
 #### Sign In
 
-```http
+```
   POST /auth/sign-in
 ```
 
@@ -33,7 +33,7 @@ When I was working on the project, I had a design diagram of this project before
 
 #### User Profile
 
-```http
+```
   GET /auth/profile
 ```
 
@@ -43,7 +43,7 @@ When I was working on the project, I had a design diagram of this project before
 
 ### All Users
 
-```http
+```
   GET /auth/users
 ```
 
@@ -53,7 +53,7 @@ When I was working on the project, I had a design diagram of this project before
 
 ### All coin
 
-```http
+```
   GET /coin
 ```
 
@@ -63,7 +63,7 @@ When I was working on the project, I had a design diagram of this project before
 
 #### Get coin by id
 
-```http
+```
   GET /coin/{id}
 ```
 
@@ -73,7 +73,7 @@ When I was working on the project, I had a design diagram of this project before
 
 #### Create Coin
 
-```http
+```
   POST /coin
 ```
 
@@ -86,7 +86,7 @@ When I was working on the project, I had a design diagram of this project before
 
 #### Update Coin
 
-```http
+```
   PUT /coin
 ```
 
@@ -99,7 +99,7 @@ When I was working on the project, I had a design diagram of this project before
 
 #### Delete coin
 
-```http
+```
   DELETE /coin/{id}
 ```
 
@@ -109,7 +109,7 @@ When I was working on the project, I had a design diagram of this project before
 
 ### All wallet
 
-```http
+```
   GET /wallet
 ```
 
@@ -119,7 +119,7 @@ When I was working on the project, I had a design diagram of this project before
 
 #### Get wallet by id
 
-```http
+```
   GET /wallet/{id}
 ```
 
@@ -129,7 +129,7 @@ When I was working on the project, I had a design diagram of this project before
 
 #### Add Token to wallet
 
-```http
+```
   POST /wallet
 ```
 
@@ -140,7 +140,7 @@ When I was working on the project, I had a design diagram of this project before
 
 #### Sell Token to wallet
 
-```http
+```
   POST /wallet/sell
 ```
 
@@ -151,7 +151,7 @@ When I was working on the project, I had a design diagram of this project before
 
 #### Delete coin
 
-```http
+```
   DELETE /wallet/transfer
 ```
 
@@ -163,7 +163,7 @@ When I was working on the project, I had a design diagram of this project before
 
 ## Authors
 
-- [@khris-xp](https://github.com/khris-xp)
+- [@khris-xp](s://github.com/khris-xp)
 
 ## Environment Variables
 
